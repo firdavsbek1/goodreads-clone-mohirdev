@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+    Book List Page
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+
+        <h1>Books</h1>
+    <div class="row mb-3">
+        <div class="col-4">
+            <form class="d-flex" action="" method="get">
+                <input type="text" name="q" placeholder="Search" class="form-control me-2" value="{{ search_query }}">
+                <button class="btn btn-success">Search</button>
+            </form>
+        </div>
+    </div>
+        {% if page_obj %}
+            {% for book in page_obj %}
+                <div class="row mb-3">
+                    <div class="col-3 mb-1">
+                        <img class="cover-image" src="{{ book.cover_image.url }}" alt="book cover page">
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'books:detail' book.id %}"><h4>{{ book.title }}</h4></a>
+                        <p>{{ book.description }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No books found.</p>
+        {% endif %}
+
+
+
+    <nav aria-label="...">
+        <ul class="pagination">
+
+
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1"> <<&nbsp;first</a></li>
+                <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number  }}" tabindex="-1">Previous</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+                <a class="page-link" href="#">{{ page_obj.number }}</a>
+            </li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last >></a></li>
+            {% endif %}
+
+
+        </ul>
+    </nav>
+
+     </div>
+
+{% endblock content %}

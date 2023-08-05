@@ -1,0 +1,23 @@
+.profile-image{
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+    }
+
+.small-profile-image{
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+
+.cover-image{
+    width: 180px;
+    height: 220px;
+}
+
+.link-muted { color: #aaa; }
+.link-muted:hover { color: #1266f1; }
+.center{
+    margin:0 auto;
+    display: block;
+}

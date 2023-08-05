@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}Detail Page{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <img class='cover-image' src="{{ book.cover_image.url }}" alt="cover image">
+            </div>
+            <div class="col-8">
+                <h1>{{ book.title }}</h1>Authored by
+                <span class="fst-italic fw-medium">
+                    {% for bookauthor in book.bookauthor_set.all %}
+                        {% if forloop.last %}
+                            {{ bookauthor.author.full_name }}
+                        {% else %}
+                            {{ bookauthor.author.full_name }},
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <p>{{ book.description|linebreaks }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mt-4 mb-4">
+        <div class="col-5">
+            <form action="{% url 'books:add-review' book.id %}" method="post">{% csrf_token %}
+{#                <label for="stars_given">Stars given <span class="text-danger">*</span></label>#}
+{#                <input class="form-control mb-2" id="stars_given" type="number"  name="stars_given">#}
+{#                <label for="comment">Comment <span class="text-danger">*</span></label>#}
+{#                <textarea class="form-control mb-2" name="comment" id="comment" cols="30" rows="5"></textarea>#}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-success" value="Add review">
+            </form>
+        </div>
+    </div>
+
+    {% if book.reviews.exists %}
+        <h2>Reviews</h2>
+        <hr>
+
+    {% for review in book.reviews.all %}
+        <div class="row">
+            <div class="col-2">
+                <img class="small-profile-image" src="{{ review.user.profile_image.url }}" alt="profile image">
+            </div>
+            <div class="col-5">
+                <span class="fw-medium">{{ review.user.username }}&nbsp;
+                <span class="fw-normal">rated
+                    {% for _ in '12345'|make_list %}
+                        {% if forloop.counter <= review.stars_given %}⭐{% endif %}
+                    {% endfor %}
+                </span>
+                </span>&nbsp;<span class="fw-lighter">{{ review.created_at }}</span>
+            {% if request.user == review.user %}
+                    <span><a href="{% url 'books:edit-review' book.id review.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></span>&nbsp;
+            <span><a href="{% url 'books:delete-review' book.id review.id %}"><i class="fa-sharp fa-solid fa-trash"></i>&nbsp;Delete</a></span>
+            {% endif %}
+                <p>{{ review.comment }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% endif %}
+{% endblock %}
