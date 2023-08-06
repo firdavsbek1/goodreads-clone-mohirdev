@@ -80,8 +80,8 @@ DATABASES = {
         'NAME': 'goodreads',
         'PORT':5432,
         'HOST':'localhost',
-        'USER':'firdavs',
-        'PASSWORD':'fi77av77ek'
+        'USER':config("USER"),
+        'PASSWORD':config('DB_PASSWORD')
     }
 }
 
